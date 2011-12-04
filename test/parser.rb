@@ -111,6 +111,27 @@ ozo, 61 años, soltero, DNI: 8.32-
     assert_equal "José Luis Cardozo", sociedades[0].personas[0].nombre
   end
 
+  def test_no_parsear_convocatorias
+    sociedades = parse(<<-EOS)
+BALOUNE
+
+SOCIEDAD DEL ESTADO
+
+Socios: José Luis Card-
+ozo, 61 años, soltero, DNI: 8.32-
+0.597,  Sud  América 5811  Laferrere, Provincia  de  Buenos  Aires;
+
+2.1. CONVOCATORIAS
+
+Juan Pérez DNI 8.123.456
+
+    EOS
+
+    assert_equal 1, sociedades.size
+
+    assert_equal ["José Luis Cardozo"], sociedades[0].personas.map(&:nombre)
+  end
+
   def parse(str)
     result = []
 
