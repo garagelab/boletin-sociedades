@@ -4,18 +4,20 @@ require_relative "palabra"
 require_relative "core_ext"
 
 class Parser
-  MARKER = "SOCIEDAD ANONIMA"
+  MARKER = /^SOCIEDAD (DE RESPONSABILIDAD|ANONIMA|DEL ESTADO)/
 
   def self.parse(io)
     current = nil
 
     buffer = []
 
+    join_next = false
+
     io.lines do |line|
       line = line.strip
       next if line.empty?
 
-      if line == MARKER
+      if line =~ MARKER
         buffer.slice!(0..-2) if current.nil?
 
         if current
@@ -25,15 +27,23 @@ class Parser
 
         current = Sociedad.new
         current.razon_social = buffer.delete_at(0)
+        current.tipo_social = line
 
         buffer.size == 0 || (raise "Expected buffer to be empty at this point.")
       else
-        buffer << line
+        if join_next
+          buffer.last.slice!(-1..-1)
+          buffer.last << line
+        else
+          buffer << line
+        end
+
+        join_next = line.end_with?("-")
       end
     end
 
     if current
-      current.text = buffer.slice!(0..-2).join(" ")
+      current.text = buffer.join(" ")
       yield(current)
     end
   end
