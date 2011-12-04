@@ -1,6 +1,5 @@
 require 'xapian-fu'
 
-
 class BoletinDB < XapianFu::XapianDb
   def initialize(dir="/tmp/boletin_db")
     super(:dir => dir,

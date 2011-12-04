@@ -10,8 +10,13 @@ DB_DIR = "/tmp/boletino"
 
 class SociedadTest < Test::Unit::TestCase
 
+  def setup
+    destroy_db
+  end
+
   def test_db_creation
     bdb = create_db
+    bdb.rw
     assert File.exists?(DB_DIR)
     bdb.rw.close
     destroy_db
@@ -25,10 +30,7 @@ class SociedadTest < Test::Unit::TestCase
 
     assert s.size == 1
     assert s.first.values["persona_nombre"] == r[:persona_nombre]
-    bdb.rw.close
-    destroy_db
   end
-
 
   def test_sociedad_storage
     bdb = create_db
@@ -41,6 +43,8 @@ class SociedadTest < Test::Unit::TestCase
 
     assert bdb.search("record_type:Persona").size == 6
     assert bdb.search("record_type:Sociedad").size == 1
+
+    assert_equal 2, bdb.search("emiliano").size
   end
 
   private

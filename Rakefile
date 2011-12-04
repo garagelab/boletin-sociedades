@@ -33,7 +33,7 @@ task :load_boletines do
 
   bdb = BoletinDB.new(File.dirname(__FILE__) + "/db")
 
-  Dir["dataset/*-2.txt"].each do |fname|
+  Dir["dataset/BO2011*-2.txt"].each do |fname|
     STDERR.puts "Parsing #{fname}"
 
     time = Time.strptime(File.basename(fname)[2, 8], "%Y%m%d")
@@ -46,6 +46,8 @@ task :load_boletines do
       end
       STDERR.puts "  parsed #{cnt} records"
     end
+
+    bdb.flush
   end
 
 end

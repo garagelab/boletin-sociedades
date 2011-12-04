@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require_relative "sociedad"
 require_relative "persona"
 require_relative "palabra"
@@ -30,7 +32,7 @@ class Parser
         end
 
         current = Sociedad.new
-        current.razon_social = buffer.delete_at(0)
+        current.razon_social = (buffer.delete_at(0) || "").upcase
         current.tipo_social = line
         attrs.each { |k, v| current.send("#{k}=", v) }
 
