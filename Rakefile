@@ -29,15 +29,18 @@ end
 task :load_boletines do
   require_relative 'lib/parser'
   require_relative 'lib/model'
-  
+  require "time"
+
   bdb = BoletinDB.new(File.dirname(__FILE__) + "/db")
 
-  Dir["dataset/*"].each do |fname|
+  Dir["dataset/*-2.txt"].each do |fname|
     STDERR.puts "Parsing #{fname}"
+
+    time = Time.strptime(File.basename(fname)[2, 8], "%Y%m%d")
 
     File.open(fname) do |f|
       cnt = 0
-      Parser.parse(f) do |sociedad|
+      Parser.parse(f, fecha_aparicion: time.strftime("%Y-%m-%d")) do |sociedad|
         bdb.store_sociedad(sociedad)
         cnt += 1
       end

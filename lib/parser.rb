@@ -8,7 +8,7 @@ class Parser
 
   HALTER = /^2\.1\. CONVOCATORIAS/
 
-  def self.parse(io)
+  def self.parse(io, attrs = {})
     current = nil
 
     buffer = []
@@ -32,6 +32,7 @@ class Parser
         current = Sociedad.new
         current.razon_social = buffer.delete_at(0)
         current.tipo_social = line
+        attrs.each { |k, v| current.send("#{k}=", v) }
 
         buffer.size == 0 || (raise "Expected buffer to be empty at this point.")
       else

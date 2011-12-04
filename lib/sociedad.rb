@@ -6,7 +6,7 @@ require_relative "persona"
 class Sociedad
   attr_accessor :razon_social
   attr_accessor :tipo_social
-  attr_accessor :fecha_aparicion # TODO STUB!!
+  attr_accessor :fecha_aparicion
   attr_accessor :text
 
   STOPWORDS = %w(de la)

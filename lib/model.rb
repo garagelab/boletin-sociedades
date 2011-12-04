@@ -5,7 +5,9 @@ class BoletinDB < XapianFu::XapianDb
   def initialize(dir="/tmp/boletin_db")
     super(:dir => dir,
           :create => true,
-          :fields => { 
+          :language => :spanish,
+          :stemmer => false,
+          :fields => {
             :persona_nombre => { :store => true },
             :persona_dni => { :store => true },
             :persona_cuit => { :store => true },
@@ -20,9 +22,9 @@ class BoletinDB < XapianFu::XapianDb
   end
 
   def store_sociedad(sociedad)
-    
+
     personas = sociedad.personas.map { |p|
-      { 
+      {
         :record_type => "Persona",
         :persona_nombre => p.nombre,
         :persona_dni => p.dni,
@@ -33,13 +35,13 @@ class BoletinDB < XapianFu::XapianDb
     # TODO store a list of things without looping here?
     personas.each { |p| self << p }
 
-    self << { 
+    self << {
       :record_type => "Sociedad",
       :sociedad_razon_social => sociedad.razon_social,
       :sociedad_tipo_social => sociedad.tipo_social,
       :sociedad_fecha_aparicion => sociedad.fecha_aparicion,
       :sociedad_personas => personas,
-      :sociedad_text => sociedad.text 
+      :sociedad_text => sociedad.text
     }
 
 
