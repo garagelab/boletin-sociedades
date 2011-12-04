@@ -6,6 +6,8 @@ require_relative "core_ext"
 class Parser
   MARKER = /^SOCIEDAD (DE RESPONSABILIDAD|ANONIMA|DEL ESTADO)/
 
+  HALTER = /^2\.1\. CONVOCATORIAS/
+
   def self.parse(io)
     current = nil
 
@@ -16,6 +18,8 @@ class Parser
     io.lines do |line|
       line = line.strip
       next if line.empty?
+
+      break if line =~ HALTER
 
       if line =~ MARKER
         buffer.slice!(0..-2) if current.nil?
