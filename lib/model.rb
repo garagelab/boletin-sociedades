@@ -18,7 +18,6 @@ class BoletinDB < XapianFu::XapianDb
             :sociedad_text => { :store => true },
             :record_type => { :store => true }
           })
-    self.rw
   end
 
   def store_sociedad(sociedad)
