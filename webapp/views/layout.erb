@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Boletin Oficial</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="/bootstrap/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+      }
+    </style>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap-twipsy.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+        <h1>Boletín Oficial</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat</p>
+        <div class="row">
+          <div class="span12">
+            <form action="/search" method="GET">
+              <input class="xlarge" id="xlInput" name="q"
+                     style="width: 400px"
+                     size="40" type="text" placeholder="Buscar Nombres, Razones Sociales, CUITs o DNIs">
+              <input type="submit" class="btn primary" value="Buscar">
+            </form>
+          </div> <!-- span12 -->
+        </div> <!-- row -->
+        <div class="row">
+          <%= yield %>
+        </div>
+    </div> <!-- container -->
+  </body>
+</html>
