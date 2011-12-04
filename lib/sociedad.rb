@@ -26,7 +26,7 @@ class Sociedad
 
     text.gsub!(/\b(S\.?A\.?|S\.?R\.?L|S\.H\.)\b/, "")
 
-    chunks = text.split(/[;,]|\d+\)| y |(?<!\p{Lu}):|(?<!\p{Lu})\.(?!\d)/)
+    chunks = text.split(/[;,]|\d+\)| y |(?<!\p{Lu}):|(?<!\p{Lu})\.(?!\d)|\bcede\b/)
 
     chunks.each do |chunk|
       if persona = find_persona(chunk)

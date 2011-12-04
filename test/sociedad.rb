@@ -139,4 +139,11 @@ class SociedadTest < Test::Unit::TestCase
 
     assert_equal "30925287", s.personas.detect { |p| p.nombre == "Florencia Crosta Blanco" }.dni
   end
+
+  def test_conjunciones
+    s = Sociedad.new
+    s.text = "Por Contrato Privado de Cesión del 05/12/07 que me autoriza a publicar, Arturo José Veloso Diz cede sus 9.500 cuotas a Juan Carlos Veloso D.N.I. 13.915.391, renunciando a la Gerencia y Manuel Veloso Diz cede sus 9.500 cuotas a Manuel Santiago Veloso, D.N.I. 17.576.232, renunciando a la Gerencia. Se designan Gerentes indistintamente a Juan Carlos Veloso y Manuel Santiago Veloso, ambos con domicilios especiales en Marcelo T. de Alvear 1611, Capital Federal.  Abogado Osvaldo Jamschon"
+
+    assert_equal ["Arturo José Veloso Diz", "Juan Carlos Veloso", "Manuel Veloso Diz", "Manuel Santiago Veloso", "Marcelo T. de Alvear", "Osvaldo Jamschon"], s.personas.map(&:nombre)
+  end
 end
