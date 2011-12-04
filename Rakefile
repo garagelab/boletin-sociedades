@@ -26,6 +26,27 @@ task :names do
   end
 end
 
+task :load_boletines do
+  require_relative 'lib/parser'
+  require_relative 'lib/model'
+  
+  bdb = BoletinDB.new(File.dirname(__FILE__) + "/db")
+
+  Dir["dataset/*"].each do |fname|
+    STDERR.puts "Parsing #{fname}"
+
+    File.open(fname) do |f|
+      cnt = 0
+      Parser.parse(f) do |sociedad|
+        bdb.store_sociedad(sociedad)
+        cnt += 1
+      end
+      STDERR.puts "  parsed #{cnt} records"
+    end
+  end
+
+end
+
 task :test do
   Dir["test/**/*.rb"].each { |p| require_relative p }
 end
