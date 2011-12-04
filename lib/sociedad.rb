@@ -73,7 +73,7 @@ private
 
     name = name.drop_while { |w| PREFIXES.include?(w) }
 
-    return unless PALABRAS[name.first.downcase.tr("áéíóúñ", "aeioun")].nombre?
+    return unless PALABRAS[name.first.simplified].nombre?
 
     if name.size > 2
       return if dic[(lpos + 1)..(rpos - 1)].count { |x| !x } > MAX_DISTANCE
