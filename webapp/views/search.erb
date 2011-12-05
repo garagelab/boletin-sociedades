@@ -1,30 +1,35 @@
 <% # encoding: UTF-8 %>
+<div class="span12">
 <% @results.each do |r| %>
    <div class="row">
      <% if r.values["record_type"] == 'Persona' %>
-     <h2><%= r.values["persona_nombre"] %></h2>
-     <% if r.values["persona_dni"] or r.values["persona_cuit"] %>
+     <h2><%= r.values["persona_nombre"].force_encoding('UTF-8') %></h2>
+     <% if r.values["persona_dni"] != "" or r.values["persona_cuit"] != "" %>
      <dl>
-       <% if r.values["persona_dni"] %>
+       <% if r.values["persona_dni"] != "" %>
        <dt>DNI</dt>
        <dd><%= r.values["persona_dni"] %></dd>
        <% end %>
-       <% if r.values["persona_cuit"] %>
+       <% if r.values["persona_cuit"] != "" %>
        <dt>CUIT</dt>
-       <dd><%= r.values["persona_cuit"] %></dd>
+       <dd><a href="http://cuits.org/cuits/<%= r.values["persona_cuit"] %>"><%= r.values["persona_cuit"] %></a></dd>
        <% end %>
      </dl>
      <% end %>
      <% else %>
      <h2><%= r.values["sociedad_razon_social"] %></h2>
      <p><% eval(r.values["sociedad_personas"]).each do |p| %>
-       <a href="#"><%= p[:persona_nombre].force_encoding('UTF-8') %></a> / <% end %></p>
-     <% end %>
+       <a href="#"><%= p[:persona_nombre].force_encoding('UTF-8')
+       %></a> <% if r.values["persona_cuit"] != ""
+       %>(<a href="http://cuits.org/cuits/<%= r.values["persona_cuit"]
+       %>"><%= r.values["persona_cuit"] %></a>) <% end %> / <% end %></p>
      <a class="show_text" href="#">(ver texto del boletín)</a>
      <p style="display: none"><%= r.values["sociedad_text"].force_encoding('UTF-8') %></p>
+     <% end %>
    </div>
+   <hr >
    <% end %>
-
+</div>
 <script type="text/javascript">
   $(function() {
     $('.show_text').click(function() {
