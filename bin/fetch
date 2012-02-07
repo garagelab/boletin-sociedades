@@ -1,0 +1,23 @@
+#! /bin/bash
+
+counter=0
+
+while true; do
+  day=$(date -v-"$counter"d +%Y%m%d)
+
+  for section in 01 02 03; do
+    output="$day-$section.pdf"
+
+    if [[ ! -f "$output" ]]; then
+      rm "$output.tmp"
+
+      while ! wget "http://www.boletinoficial.gov.ar/DisplayPdf.aspx?s=$section&f=$day" -O "$output.tmp"; do
+        sleep 5
+      done
+
+      mv "$output.tmp" "$output"
+    fi
+  done
+
+  counter=$((counter + 1))
+done
