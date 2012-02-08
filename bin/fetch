@@ -3,13 +3,13 @@
 counter=0
 
 while true; do
-  day=$(date -v-"$counter"d +%Y%m%d)
+  day=$(ruby -e 'puts (Time.now - (ARGV.first.to_i * 86400)).strftime("%Y%m%d")' "$counter")
 
   for section in 01 02 03; do
     output="$day-$section.pdf"
 
     if [[ ! -f "$output" ]]; then
-      rm "$output.tmp"
+      rm -f "$output.tmp"
 
       while ! wget "http://www.boletinoficial.gov.ar/DisplayPdf.aspx?s=$section&f=$day" -O "$output.tmp"; do
         sleep 5
