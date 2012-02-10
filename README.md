@@ -38,3 +38,12 @@ Para procesar un solo día:
 Para muchos días:
 
     $ find . -name '*-02.pdf' | while read file; do pdftotext -raw "$file" - | ./bin/parse; done
+
+# Desarrollo
+
+¡Hay tests!
+
+    $ rake
+
+Para agregar funcionalidad y corregir bugs, por favor reproducir los
+casos en los tests, así no rompemos nada a futuro.
