@@ -36,26 +36,19 @@ task :load_boletines do
   require_relative 'lib/parser'
   require_relative 'lib/model'
   require "time"
+  require "batch"
 
   bdb = BoletinDB.new(File.dirname(__FILE__) + "/db")
 
-  Dir["dataset/BO2011*-2.txt"].each do |fname|
-    STDERR.puts "Parsing #{fname}"
+  Batch.each(Dir["**/*-02.pdf"]) do |path|
+    time = Time.strptime(File.basename(path)[/(\d{8})/, 1], "%Y%m%d")
 
-    time = Time.strptime(File.basename(fname)[2, 8], "%Y%m%d")
-
-    File.open(fname) do |f|
-      cnt = 0
-      Parser.parse(f, fecha_aparicion: time.strftime("%Y-%m-%d")) do |sociedad|
+    IO.popen("pdftotext -raw #{path} -") do |file|
+      Parser.parse(file, fecha_aparicion: time.strftime("%Y-%m-%d")) do |sociedad|
         bdb.store_sociedad(sociedad)
-        cnt += 1
       end
-      STDERR.puts "  parsed #{cnt} records"
     end
-
-    bdb.flush
   end
-
 end
 
 task :test do
