@@ -20,10 +20,16 @@ task :names do
 
       next if line["str"] =~ /^[[:alpha:]]$/
 
-      r.zadd("names", line["cnt_name"] || 0, line["str"])
-      r.zadd("last_names", line["cnt_last_name"] || 0, line["str"])
+      r.pipelined do
+        r.zadd("names", line["cnt_name"] || 0, line["str"])
+        r.zadd("last_names", line["cnt_last_name"] || 0, line["str"])
+      end
+
+      print "."
     end
   end
+
+  r.save
 end
 
 task :load_boletines do
