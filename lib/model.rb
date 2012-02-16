@@ -1,5 +1,15 @@
 require 'xapian-fu'
 
+class PersonaArray < Array
+  def self.to_xapian_fu_storage_value(value)
+    value.map { |item| Persona.to_xapian_fu_storage_value(item) }.join(" /// ")
+  end
+
+  def self.from_xapian_fu_storage_value(value)
+    value.split(" /// ").map { |item| Persona.from_xapian_fu_storage_value(item) }
+  end
+end
+
 class BoletinDB < XapianFu::XapianDb
   def initialize(dir="/tmp/boletin_db")
     super(:dir => dir,
@@ -7,49 +17,21 @@ class BoletinDB < XapianFu::XapianDb
           :language => :spanish,
           :stemmer => false,
           :fields => {
-            :persona_nombre => { :store => true },
-            :persona_dni => { :store => true },
-            :persona_cuit => { :store => true },
-            :sociedad_razon_social => { :store => true },
-            :sociedad_tipo_social => { :store => true },
-            :sociedad_fecha_aparicion => { :store => true },
-            :sociedad_personas => { :store => true, :type => Array },
-            :sociedad_text => { :store => true },
-            :record_type => { :store => true }
+            :razon_social => { :store => true },
+            :tipo_social => { :store => true },
+            :fecha_aparicion => { :store => true },
+            :personas => { :store => true, :type => PersonaArray },
+            :text => { :store => true },
           })
   end
 
   def store_sociedad(sociedad)
-
-    personas = sociedad.personas.map { |p|
-      {
-        :record_type => "Persona",
-        :persona_nombre => p.nombre,
-        :persona_dni => p.dni,
-        :persona_cuit => p.cuit
-      }
-    }
-
-    # TODO store a list of things without looping here?
-    personas.each { |p| self << p }
-
     self << {
-      :record_type => "Sociedad",
-      :sociedad_razon_social => sociedad.razon_social,
-      :sociedad_tipo_social => sociedad.tipo_social,
-      :sociedad_fecha_aparicion => sociedad.fecha_aparicion,
-      :sociedad_personas => personas,
-      :sociedad_text => sociedad.text
+      :razon_social => sociedad.razon_social,
+      :tipo_social => sociedad.tipo_social,
+      :fecha_aparicion => sociedad.fecha_aparicion,
+      :personas => sociedad.personas,
+      :text => sociedad.text
     }
-
-
   end
-
-
-
-
 end
-
-
-
-
